@@ -1,5 +1,7 @@
 # Base Node Project
 
+ [![GitHub stars](https://img.shields.io/github/stars/mrnjifanda/create-jifi-base.svg)](https://github.com/mrnjifanda/create-jifi-base/stargazers) [![GitHub license](https://img.shields.io/github/license/mrnjifanda/create-jifi-base.svg)](https://raw.githubusercontent.com/mrnjifanda/create-jifi-base/main/LICENSE.txt)
+
 > ### Project base to create an API with Node.js, Express and MongoDB. The code supports authentication and logging. You can follow us on: [Mr NJIFANDA](http://www.njifanda.com)
 
 This repo is functionality complete — PRs and issues welcome!

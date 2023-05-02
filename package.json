@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "Mr NJIFANDA",
-  "license": "ISC",
+  "license": "OSL-3.0",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",

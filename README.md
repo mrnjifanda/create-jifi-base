@@ -12,7 +12,7 @@ This repo is functionality complete — PRs and issues welcome!
 
 Clone the repository
 
-    git clone https://github.com/mrnjifanda/base-nodejs.git
+    git clone https://github.com/mrnjifanda/create-jifi-base.git
 
 Switch to the repo folder
 

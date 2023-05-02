@@ -1,6 +1,6 @@
 {
   "name": "@mrnjifanda/jifi-base",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Project base to create an API with Node.js, Express and MongoDB. The code supports authentication and logging. You can follow us on: [Mr NJIFANDA](http://www.njifanda.com)",
   "main": "main.js",
   "scripts": {

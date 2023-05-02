@@ -7,15 +7,6 @@ class LogsService extends BaseService {
 
         super(Log);
     }
-
-    async getLogByUser(userId){
-        return Log.find({user : userId }).populate({ path : 'user' , select : ['firstName' ,'lastName' , 'phone' , 'email', 'type']})
-    }
-
-    async getLogById(logId){
-
-        return Log.findOne({_id : logId}).populate({ path : 'user' , select : ['firstName' ,'lastName' , 'phone' , 'email', 'type']})
-    }
 }
 
 module.exports = new LogsService();

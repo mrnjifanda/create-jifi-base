@@ -65,10 +65,9 @@ class AuthService extends BaseService {
         const user = await this.create(data);
         if (user.error) return user;
 
-        const auth = super.token({ id: user.data._id});
         return {
             error: user.error,
-            data: { token: auth, user: user.data }
+            data: { otp: confirmation_token, user: user.data }
         };
     }
 

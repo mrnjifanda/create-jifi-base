@@ -11,7 +11,6 @@ function response(res, next, message, status_code, status, data = null) {
     res.response_body = format;
     res.status(status_code).json(format);
     next();
-    return ;
 }
 
 function success(res, next, message, data = null, status_code = 200, status = 'success') {
@@ -42,4 +41,9 @@ function notFound(res, next, message, data = null) {
     return failed(res, next, message, data, 404);
 }
 
-module.exports = { response, success, failed, unprocessable, notFound, internalError };
+function forbidden (res, next, message = 'This page requires a login, please login!!!') {
+
+    return failed(res, next, message, null, 403);
+}
+
+module.exports = { response, success, failed, unprocessable, notFound, internalError, forbidden };

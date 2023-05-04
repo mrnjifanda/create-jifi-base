@@ -25,7 +25,6 @@ routes.forEach(route => {
         const prefix = configs.getPrefixRoutes();
         const newRouter = require(`./routes/${route.route}.route`);
         app.use(prefix + route.path, newRouter, logInterceptor);
-        // app.use(prefix + route.path, newRouter);
     } catch (error) {
 
         throw new Error(`router error: ${error.message}`);

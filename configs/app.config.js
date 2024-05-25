@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const request_ip = require('request-ip');
 const Joi = require("joi");
 const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 
 const configs = require('./config');
 const response = require('./response.config');
@@ -74,7 +76,7 @@ const Validation = (data, rules, res, next) => {
 };
 
 module.exports = {
-    express, mongoose, Joi, bcrypt, request_ip, jwt, morgan,
+    express, mongoose, Joi, bcrypt, request_ip, jwt, morgan, fs, path,
     configs, router, response, ROLES, PASSWORD_REGEX, ALLOWED_METHODS, SECRET_TOKEN,
     BaseSchema, Validation
 };

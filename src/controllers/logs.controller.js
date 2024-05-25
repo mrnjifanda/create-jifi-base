@@ -1,42 +1,63 @@
-const { response } = require('../../configs/app.config');
+const Controller = require('./controller');
 const logsService = require('../services/logs.service');
 
-const all = async (req, res, next) => {
+class LogController extends Controller {
 
+    static instance;
+    constructor() {
 
-    const { page = 1, limit = 10, ...filters } = req.query;
-    const logs = await logsService.paginate(filters, page, limit);
-    if (logs.error) {
+      if (LogController.instance) return LogController.instance;
 
-        return response.failed(res, next, 'Find all logs error', logs.data);
+      super();
+      LogController.instance = this;
     }
 
-    return response.success(res, next, 'All logs', logs.data);
-}
+    /**
+     * @returns { LogController }
+     */
+    static getInstance() {
 
-const findById = async (req, res, next) => {
+      if (!LogController.instance) LogController.instance = new LogController();
 
-    const { selects } = req.query; 
-    const log = await logsService.findOne({ _id: req.params.id }, selects);
-    if (log.error || !log.data) {
-
-        return response.failed(res, next, log.message ?? 'Log not found', log.data);
+      return LogController.instance;
     }
 
-    return response.success(res, next, 'Log by Id', log.data);
-}
+    async all (req, res, next) {
 
-const findByUser = async (req, res, next) => {
-
-    const { page = 1, limit = 10, ...filters } = req.query;
-    filters.user = req.params.id;
-    const log = await logsService.paginate(filters, page, limit);
-    if (log.error || !log.data) {
-
-        return response.failed(res, next, log.message ?? 'Log not found', log.data);
+        const { page = 1, limit = 10, ...filters } = req.query;
+        const logs = await logsService.paginate(filters, page, limit);
+        if (logs.error) {
+    
+            return super.failed(res, 'Find all logs error', logs.data);
+        }
+    
+        return super.success(res, 'All logs', logs.data);
     }
-
-    return response.success(res, next, 'Log by Id', log.data);
+    
+    async findById (req, res, next) {
+    
+        const { selects } = req.query; 
+        const log = await logsService.findOne({ _id: req.params.id }, selects);
+        if (log.error || !log.data) {
+    
+            return super.failed(res, log.message ?? 'Log not found', log.data);
+        }
+    
+        return super.success(res, 'Log by Id', log.data);
+    }
+    
+    async findByUser (req, res, next) {
+    
+        const { page = 1, limit = 10, ...filters } = req.query;
+        filters.user = req.params.id;
+        const log = await logsService.paginate(filters, page, limit);
+        if (log.error || !log.data) {
+    
+            return super.failed(res, log.message ?? 'Log not found', log.data);
+        }
+    
+        return super.success(res, 'Log by Id', log.data);
+    }
 }
 
-module.exports = { all, findById, findByUser };
+module.exports = LogController.getInstance();

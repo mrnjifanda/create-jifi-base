@@ -3,14 +3,12 @@ function response(res, next, message, status_code, status, data = null) {
     const format = {
         status_code,
         status: status.toUpperCase(),
-        message: message
+        message: message,
+        ...(data && { data })
     };
 
-    if (data) format.data = data;
-
-    res.response_body = format;
     res.status(status_code).json(format);
-    next();
+    // if (next) next();
 }
 
 function success(res, next, message, data = null, status_code = 200, status = 'success') {
@@ -45,5 +43,6 @@ function forbidden (res, next, message = 'This page requires a login, please log
 
     return failed(res, next, message, null, 403);
 }
+
 
 module.exports = { response, success, failed, unprocessable, notFound, internalError, forbidden };

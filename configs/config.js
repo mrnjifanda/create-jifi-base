@@ -2,9 +2,25 @@ require('dotenv').config();
 
 class Config {
 
+
+    static instance;
+    env;
     constructor(env) {
 
-        this.env = env;
+      if (Config.instance) return Config.instance;
+
+      this.env = env;
+      Config.instance = this;
+    }
+
+    /**
+     * @returns { Config }
+     */
+    static getInstance(env) {
+
+      if (!Config.instance) Config.instance = new Config(env);
+
+      return Config.instance;
     }
 
     getValue(key, throwOnMissing = true) {
@@ -43,6 +59,36 @@ class Config {
 
         return this.getValue('APP_URL');
     }
+
+    getMailSettings() {
+
+        if (this.use('mail')) {
+
+            const isProd = this.isProduction() ? '' : '_DEV';
+            const data = {
+                host: this.getValue('MAIL_HOST' + isProd),
+                port: this.getValue('MAIL_PORT' + isProd),
+                user: this.getValue('MAIL_USER' + isProd),
+                senderName: this.getValue('MAIL_SENSER_NAME' + isProd),
+                senderEmail: this.getValue('MAIL_SENSER_EMAIL' + isProd),
+                secure: this.getValue('MAIL_SECURE' + isProd)
+            };
+
+            data.secure = data.secure == 'true';
+            if (data.secure) {
+
+                data['service'] = this.getValue('MAIL_SERVICE' + isProd);
+                data['auth'] = {
+                    user: this.getValue('MAIL_USER' + isProd),
+                    pass: this.getValue('MAIL_PASSWORD' + isProd)
+                };
+            }
+        
+            return data;
+        }
+
+        return {};
+    }
     
     getAppInfo() {
         return {
@@ -67,6 +113,11 @@ class Config {
         return this.getValue('DATABASE_URL');
     }
 
+    getRedis() {
+
+        return this.getValue('REDIS_URL');
+    }
+
     getSecret() {
         return this.getValue('SECRET_TOKEN');
     }
@@ -82,34 +133,8 @@ class Config {
         const mode = this.getValue('APP_MODE', false);
         return mode == 'PRODUCTION';
     }
-
-    // getSwaggerConfig() {
-
-    //     return {
-    //         'title': this.getValue('SWAGGER_TITLE', false),
-    //         'description': this.getValue('SWAGGER_DESCRIPTION', false),
-    //         'version': this.getValue('SWAGGER_VERSION', false),
-    //         'persistAuthorization': this.getValue('SWAGGER_PERSISTAUTHORIZATION', false)
-    //     }
-    // }
-
-    // getJWT() {
-    //     return {
-    //         secret: this.getValue('JWT_SECRET')
-    //     }
-    // }
-
-    // getSentryConfiguration() {
-
-    //     return {
-    //         dsn: this.getValue('SENTRY_DNS', false),
-    //         environment: this.getValue('APP_MODE', false),
-    //     };
-    // }
 }
 
-const configs = new Config(process.env).ensureValues([
+module.exports = Config.getInstance(process.env).ensureValues([
     'APP_MODE',
 ]);
-
-module.exports = configs;

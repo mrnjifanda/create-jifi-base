@@ -1,0 +1,124 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "API BASE",
+      "version": "1.0.0",
+      "description": "API de base pour la gestion de l'authentification et des logs."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ],
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Register",
+          "description": "Inscription d'un nouvel utilisateur.",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "password_confirm": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["email", "password", "password_confirm"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Inscription réussie."
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Login",
+          "description": "Connexion d'un utilisateur.",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Connexion réussie."
+            }
+          }
+        }
+      },
+      "/logs/filters": {
+        "get": {
+          "tags": ["Logs"],
+          "summary": "Filters",
+          "description": "Récupère les logs filtrés.",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Logs récupérés avec succès."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ]
+}

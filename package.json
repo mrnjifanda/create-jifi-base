@@ -4,7 +4,10 @@
   "description": "Project base to create an API with Node.js, Express and MongoDB. The code supports authentication and logging. You can follow us on: [Mr NJIFANDA](http://www.njifanda.com)",
   "main": "main.js",
   "scripts": {
+    "g": "node ./bin/cli.js",
     "start": "nodemon main.js",
+    "start:maildev": "maildev",
+    "start:queue": "nodemon queue.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,16 +15,20 @@
   "license": "OSL-3.0",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "bull": "^4.12.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "handlebars": "^4.7.8",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.5",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
     "request-ip": "^3.3.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrnjifanda/create-jifi-base.git"
@@ -29,5 +36,9 @@
   "bugs": {
     "url": "https://github.com/mrnjifanda/create-jifi-base/issues"
   },
-  "homepage": "https://github.com/mrnjifanda/create-jifi-base#readme"
+  "homepage": "https://github.com/mrnjifanda/create-jifi-base#readme",
+  "devDependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  }
 }

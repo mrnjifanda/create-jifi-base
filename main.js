@@ -1,22 +1,22 @@
-const { express, response, configs, ALLOWED_METHODS } = require('./configs/app.config');
+const { express, response, configs, ALLOWED_METHODS, path, morgan } = require('./configs/app.config');
 
 const cors = require('cors');
-const path = require('path');
 const routes = require('./routes/routes');
 const db = require('./configs/database.config');
+const swagger = require('./docs/swagger');
 
 const app = express();
-if (configs.use('database')) {
-
-    db.connect(configs.getDatabase());
-}
+if (configs.use('database')) db.connect(configs.getDatabase());
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan('combined'));
 
-const logInterceptor = require("./utils/interceptors/logs.interceptor");
+// const logInterceptor = require("./utils/interceptors/logs.interceptor");
+// app.use(logInterceptor.captureResponseBody);
+// app.use(logInterceptor.logInterceptor);
 
 routes.forEach(route => {
 
@@ -24,12 +24,14 @@ routes.forEach(route => {
 
         const prefix = configs.getPrefixRoutes();
         const newRouter = require(`./routes/${route.route}.route`);
-        app.use(prefix + route.path, newRouter, logInterceptor);
+        app.use(prefix + route.path, newRouter);
     } catch (error) {
 
         throw new Error(`router error: ${error.message}`);
     }
 });
+
+swagger(app);
 
 app.use((req, res, next) => {
 

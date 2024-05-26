@@ -4,7 +4,7 @@
   "description": "Project base to create an API with Node.js, Express and MongoDB. The code supports authentication and logging. You can follow us on: [Mr NJIFANDA](http://www.njifanda.com)",
   "main": "main.js",
   "scripts": {
-    "g": "node ./bin/cli.js",
+    "g": "node ./bin/cli",
     "start": "nodemon main.js",
     "start:maildev": "maildev",
     "start:queue": "nodemon queue.js",

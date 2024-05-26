@@ -38,6 +38,14 @@ You can now access the server at <http://localhost:3000> if port is 3000
 
 # Code overview
 
+## CLI
+
+### `npm run g [TYPE] [NAME]`
+Examples:
+- `npm run g controller index` This command will generate an index.controller.js file in the controllers folder. We can replace `controlle` with `c`
+- `npm run g service index` This command will generate an index.service.js file in the services folder. We can replace `service` with `s`
+- `npm run g model index` This command will generate an index.model.js file in the models folder. We can replace `model` with `m`
+
 ## Dependencies
 
 -
@@ -66,7 +74,6 @@ You can now access the server at <http://localhost:3000> if port is 3000
 
 # Future updates
 
-- Sending emails
 - Upload files
 
 ----------

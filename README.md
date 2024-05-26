@@ -45,6 +45,7 @@ Examples:
 - `npm run g controller index` This command will generate an index.controller.js file in the controllers folder. We can replace `controlle` with `c`
 - `npm run g service index` This command will generate an index.service.js file in the services folder. We can replace `service` with `s`
 - `npm run g model index` This command will generate an index.model.js file in the models folder. We can replace `model` with `m`
+- `npm run g resource index` This command will generate an index.model.js, index.service.js and index.controller.js file in each of the respective folders. We can replace `resource` with `r`
 
 ## Dependencies
 
@@ -56,7 +57,7 @@ Examples:
 - `public` - Contains all public assets
 - `routes` - Contains all the api routes defined in routes.js file
 - `src` - Contains all the api controllers, models and services
-- `src` - Contains all the api helpers, interceptors, middlewares and validations
+- `utils` - Contains all the api helpers, interceptors, middlewares and validations
 
 ## Environment variables
 

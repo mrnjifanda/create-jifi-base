@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+const templates = {
+    controller: name => `const Controller = require('./controller');
+  
+class ${name}Controller extends Controller {
+
+    static instance;
+    constructor() {
+        if (${name}Controller.instance) return ${name}Controller.instance;
+        super();
+        ${name}Controller.instance = this;
+    }
+
+    /**
+     * @returns { ${name}Controller }
+     */
+    static getInstance() {
+        if (!${name}Controller.instance) ${name}Controller.instance = new ${name}Controller();
+        return ${name}Controller.instance;
+    }
+
+    index(req, res, next) {
+        return super.success(res, 'Welcome', {});
+    }
+}
+
+module.exports = ${name}Controller.getInstance();
+`,
+
+    model: name => `const { BaseSchema } = require("../../configs/app.config");
+  
+const schema = {
+    example: {
+        type: String,
+        required: false,
+        default: null
+    }
+};
+
+const ${name} = BaseSchema('${name.toLowerCase()}s', schema);
+
+module.exports = ${name};
+`,
+
+    service: name => `const BaseService = require("./base.service");
+const ${name} = require("../models/${name.toLowerCase()}.model");
+
+class ${name}Service extends BaseService {
+
+    static instance;
+    constructor() {
+        if (${name}Service.instance) return ${name}Service.instance;
+        super(${name});
+        ${name}Service.instance = this;
+    }
+
+    /**
+     * @returns { ${name}Service }
+     */
+    static getInstance() {
+        if (!${name}Service.instance) ${name}Service.instance = new ${name}Service();
+        return ${name}Service.instance;
+    }
+}
+
+module.exports = ${name}Service.getInstance();
+`
+};
+
+module.exports = templates;

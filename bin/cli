@@ -2,136 +2,60 @@
 
 const fs = require('fs');
 const path = require('path');
+const templates = require('./templates');
 
-const ucfirst = str => str[0].toUpperCase() + str.slice(1);
+const ucfirst = str => str.charAt(0).toUpperCase() + str.slice(1);
 
 const getType = type => {
-  if (type === 'c') return 'controller';
-  if (type === 'm') return 'model';
-  if (type === 's') return 'service';
-
-  return type;
-}
-
-const controllerTemplate = controllerName => {
-
-  return `const Controller = require('./controller');
-
-class ${controllerName}Controller extends Controller {
-
-  static instance;
-  constructor() {
-
-    if (${controllerName}Controller.instance) return ${controllerName}Controller.instance;
-
-    super();
-    ${controllerName}Controller.instance = this;
-  }
-
-  /**
-   * @returns { ${controllerName}Controller }
-   */
-  static getInstance() {
-
-    if (!${controllerName}Controller.instance) ${controllerName}Controller.instance = new ${controllerName}Controller();
-
-    return ${controllerName}Controller.instance;
-  }
-
-  ${controllerName} (req, res, next) {
-    return super.success(res, 'Welcome', {});
-  }
-}
-
-module.exports = ${controllerName}Controller.getInstance();
-`;
-}
-
-const modelTemplate = name => {
-
-  return `const { BaseSchema } = require("../../configs/app.config");
-
-const schema = {
-  example: {
-    type: String,
-    required: false,
-    default: null
-  }
+  const types = {
+    'c': 'controller',
+    'm': 'model',
+    's': 'service',
+    'r': 'resource'
+  };
+  return types[type] || type;
 };
 
-const ${name} = BaseSchema('${name.toLowerCase()}s', schema);
-
-module.exports = ${name};
-`;
-}
-
-const serviceTemplate = name => {
-
-  return `const BaseService = require("./base.service");
-const ${name} = require("../models/${name.toLowerCase()}.model");
-
-class ${name}Service extends BaseService {
-
-  static instance;
-  constructor() {
-
-    if (${name}Service.instance) return ${name}Service.instance;
-
-    super(${name});
-    ${name}Service.instance = this;
-  }
-
-  /**
-   * @returns { ${name}Service }
-   */
-  static getInstance() {
-
-    if (!${name}Service.instance) ${name}Service.instance = new ${name}Service();
-
-    return ${name}Service.instance;
-  }
-}
-
-module.exports = ${name}Service.getInstance();
-`;
-}
-
-const generate = (fileName, fileType = 'controller') => {
-
-  const dirPath = path.join(__dirname, `../src/${fileType.toLowerCase()}s`);
-  const file = `${fileName}.${fileType}.js`;
-  const filePath = path.join(dirPath, file);
+const generateFile = (dirPath, fileName, template) => {
 
   if (!fs.existsSync(dirPath)) {
 
     fs.mkdirSync(dirPath, { recursive: true });
   }
 
-  let data = '';
+  fs.writeFileSync(path.join(dirPath, fileName), template, 'utf8');
+};
+
+const generate = (fileName, fileType) => {
+
   const FileName = ucfirst(fileName);
-  if (fileType === 'controller' || fileType === 'c') {
+  const fileTypeLower = fileType.toLowerCase();
 
-    data = controllerTemplate(FileName);
-  } else if (fileType === 'service' || fileType === 's') {
-  
-    data = serviceTemplate(FileName);
-  } else if (fileType === 'model' || fileType === 'm') {
+  if (fileTypeLower === 'resource') {
 
-    data = modelTemplate(FileName);
+    ['controller', 'model', 'service'].forEach(type => {
+      const dirPath = path.join(__dirname, `../src/${type}s`);
+      const filePath = `${fileName}.${type}.js`;
+      const template = templates[type](FileName);
+      generateFile(dirPath, filePath, template);
+      console.log(`${ucfirst(type)} ${filePath} created successfully`);
+    });
   } else {
-    // Ressource
-  }
 
-  fs.writeFileSync(filePath, data, 'utf8');
-  console.log(`${ucfirst(fileType)} ${file} created successfully`);
-}
+    const dirPath = path.join(__dirname, `../src/${fileTypeLower}s`);
+    const filePath = `${fileName}.${fileTypeLower}.js`;
+    const template = templates[fileTypeLower](FileName);
+    generateFile(dirPath, filePath, template);
+    console.log(`${ucfirst(fileTypeLower)} ${filePath} created successfully`);
+  }
+};
 
 const [,, type, name] = process.argv;
 const valideType = [
   'controller', 'c',
   'service', 's',
   'model', 'm',
-  // 'resource', 'r'
+  'resource', 'r'
 ];
 
 if (!type || !valideType.includes(type)) {

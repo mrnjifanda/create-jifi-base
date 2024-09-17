@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const mailService = require('../src/services/mail.service');
 
 mailService.processQueue();

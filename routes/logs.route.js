@@ -1,4 +1,5 @@
 const { router } = require('../configs/app.config');
+
 const logsController = require('../src/controllers/logs.controller');
 const authMiddleware = require('../utils/middlewares/auth/auth.middleware');
 

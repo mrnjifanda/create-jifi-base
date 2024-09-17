@@ -45,15 +45,19 @@ const Log = BaseSchema('logs', {
         type: Object,
         default: {}
     },
+    request_body: {
+        type: Object,
+        require: true,
+        default: {}
+    },
     response_body: {
         type: Object,
         require: true,
         default: {}
     },
-    response_time: {
+    execution_time: {
         type: Number,
-        require: false,
-        default: 0
+        require: true
     }
 });
 

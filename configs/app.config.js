@@ -47,7 +47,13 @@ const BaseSchema = (collectoion, schema) => {
         }
     };
 
-    const collectionSchema = new Schema({ ...schema, ...base })
+    const collectionSchema = new Schema({ ...schema, ...base });
+    collectionSchema.pre('save', function(next) {
+
+        const now = new Date();
+        this.updated_at = now;
+        next();
+    });
     return mongoose.model(collectoion, collectionSchema);
 };
 

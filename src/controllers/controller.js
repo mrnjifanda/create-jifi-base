@@ -9,7 +9,7 @@ class Controller {
 
     failed (res, message, data = null, status_code = 401, status = 'failed') {
 
-        return response.success(res, null, message, data, status_code, status);
+        return response.failed(res, null, message, data, status_code, status);
     }
     unprocessable (res, data = null) {
 

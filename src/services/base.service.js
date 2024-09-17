@@ -159,7 +159,7 @@ class BaseService {
 
         try {
 
-            const update = await this.getModel(model).updateOne(filter, {
+            await this.getModel(model).updateOne(filter, {
                 $set: data
             }, { new: true });
 

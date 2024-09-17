@@ -24,7 +24,7 @@ class IndexController extends Controller {
 
     index (req, res, next) {
 
-        return super.success(res, 'Welcom', configs.getAppInfo());
+      return super.success(res, 'Welcom', configs.getAppInfo());
     }
 }
 

@@ -9,7 +9,12 @@ class MailService {
     settings;
     transport;
     templateConfig;
+
+    /**
+     * @type { QueueService }
+     */
     queue;
+
     constructor(settings, templateConfig) {
 
       if (MailService.instance) return MailService.instance;

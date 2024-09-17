@@ -7,7 +7,7 @@
     "g": "node ./bin/cli",
     "start": "nodemon main.js",
     "start:maildev": "maildev",
-    "start:queue": "nodemon queue.js",
+    "start:queue": "nodemon ./bin/queue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

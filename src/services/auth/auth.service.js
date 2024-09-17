@@ -27,11 +27,12 @@ class AuthService extends BaseService {
 
     async login(data, active = false) {
 
-        let find_user = await super.findOne({ email: new RegExp(data.email, 'i')}, { select: 'last_name, first_name, username, email, password, role, confirmed_at' });
+        let find_user = await super.findOne({ email: new RegExp(data.email, 'i') }, { select: 'last_name, first_name, username, email, password, role, confirmed_at' });
         if (find_user.error || !find_user.data) return { error: true, message: 'This account not found' };
 
         const user = find_user.data;
-        if (!this.hashCompare(data.password, user.password)) return { error: true, message: 'Password does not match' };
+        const verify_password = await this.hashCompare(data.password, user.password); 
+        if (!verify_password) return { error: true, message: 'Password does not match' };
 
         if (active && !user.confirmed_at) return { error: true, message: 'Account is not yet activated' }
 

@@ -6,28 +6,23 @@ const db = require('./configs/database.config');
 const swagger = require('./docs/swagger');
 
 const app = express();
+app.use(cors());
+
 if (configs.use('database')) db.connect(configs.getDatabase());
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan('combined'));
 
-// const logInterceptor = require("./utils/interceptors/logs.interceptor");
-// app.use(logInterceptor.captureResponseBody);
-// app.use(logInterceptor.logInterceptor);
-
 routes.forEach(route => {
 
     try {
 
-        const prefix = configs.getPrefixRoutes();
-        const newRouter = require(`./routes/${route.route}.route`);
-        app.use(prefix + route.path, newRouter);
+        app.use(configs.getPrefixRoutes() + route.path, require(`./routes/${route.route}.route`));
     } catch (error) {
 
-        throw new Error(`router error: ${error.message}`);
+        throw new Error(`Router error: ${error.message}`);
     }
 });
 

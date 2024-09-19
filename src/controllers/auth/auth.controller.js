@@ -24,10 +24,11 @@ class AuthController extends Controller {
 
     async register (req, res, next) {
 
-        const data = await authService.register(req.body);
-        if (data.error) return super.failed(res, data.message);
+        const response = await authService.register(req.body);
+        if (response.error) return super.failed(res, response.message);
     
-        return super.success(res, 'User created successfully', data.data, 201);
+        const data = response.data;
+        return super.success(res, 'User created successfully', { otp: data.otp, email: data.user.email }, 201);
     };
     
     async activate_account (req, res, next) {

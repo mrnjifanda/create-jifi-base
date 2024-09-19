@@ -22,6 +22,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
                     "email": {
                       "type": "string",
                       "format": "email"
@@ -41,6 +50,37 @@
           "responses": {
             "200": {
               "description": "Inscription réussie."
+            }
+          }
+        }
+      },
+      "/auth//activate-account": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Activate account",
+          "description": "Activation d'un utilisateur apres l'enregistrement.",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "code": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["email", "code"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Account successfully activated."
             }
           }
         }

@@ -6,9 +6,9 @@ const options = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "LogRocket Express API with Swagger",
-      version: "0.1.0",
-      description: "This is a simple CRUD API application made with Express and documented with Swagger",
+      title: "API BASE",
+      version: "1.0.0",
+      description: "API de base pour la gestion de l'authentification et des logs.",
       license: {
         name: "MIT",
         url: "https://spdx.org/licenses/MIT.html",

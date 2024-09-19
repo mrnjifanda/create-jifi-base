@@ -44,5 +44,4 @@ function forbidden (res, next, message = 'This page requires a login, please log
     return failed(res, next, message, null, 403);
 }
 
-
 module.exports = { response, success, failed, unprocessable, notFound, internalError, forbidden };

@@ -5,8 +5,10 @@ const routes = require('./routes/routes');
 const db = require('./configs/database.config');
 const swagger = require('./docs/swagger');
 
+const allowedOrigins = configs.getLists('ALLOWED_ORIGINS');
 const app = express();
-app.use(cors());
+
+app.use(cors({ origin: allowedOrigins, optionsSuccessStatus: 200 }));
 
 if (configs.use('database')) db.connect(configs.getDatabase());
 
@@ -28,6 +30,7 @@ routes.forEach(route => {
 
 swagger(app);
 
+// METHODS NOT ALLOWED MIDDLEWARE
 app.use((req, res, next) => {
 
     if (!ALLOWED_METHODS.includes(req.method)) {
@@ -38,6 +41,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// NOT FOUND ROUTE MIDDLEWARE
 app.use((req, res, next) => {
 
     return response.notFound(res, next, 'Endpoint not found, please verify your request !!!', {
@@ -48,6 +52,7 @@ app.use((req, res, next) => {
     });
 });
 
+// INTERNAL SERVER ERROR
 app.use((error, req, res, next) => {
 
     return response.internalError(res, next, error);
@@ -55,5 +60,5 @@ app.use((error, req, res, next) => {
 
 app.listen(configs.getPort(), () => {
 
-    console.log(`Application running on: ${configs.getUrl()}`);
+    console.log(`Application running on: ${ configs.getUrl() }`);
 });

@@ -2,7 +2,6 @@ require('dotenv').config();
 
 class Config {
 
-
     static instance;
     env;
     constructor(env) {
@@ -38,6 +37,11 @@ class Config {
 
         keys.forEach((k) => this.getValue(k, true));
         return this;
+    }
+
+    getLists(keys, separator = ',') {
+
+        return this.getValue(keys).split(separator);
     }
 
     getName() {

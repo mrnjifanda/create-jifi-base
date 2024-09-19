@@ -67,7 +67,7 @@ class AuthService extends BaseService {
         if (user.error) return user;
 
         return {
-            error: user.error,
+            error: false,
             data: { otp: confirmation_token, user: user.data }
         };
     }

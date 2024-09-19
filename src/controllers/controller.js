@@ -11,6 +11,7 @@ class Controller {
 
         return response.failed(res, null, message, data, status_code, status);
     }
+
     unprocessable (res, data = null) {
 
         return response.unprocessable(res, null, data);

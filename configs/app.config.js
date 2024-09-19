@@ -16,16 +16,7 @@ const Schema = mongoose.Schema;
 const SECRET_TOKEN = configs.getSecret();
 const ROLES = ['USER', 'ADMIN'];
 const PASSWORD_REGEX = new RegExp('^[a-zA-Z0-9]{3,30}$');
-const ALLOWED_METHODS = [
-    'OPTIONS',
-    'HEAD',
-    'CONNECT',
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'PATCH',
-];
+const ALLOWED_METHODS = configs.getLists('ALLOWED_METHODS');
 
 const BaseSchema = (collectoion, schema) => {
 
@@ -73,12 +64,11 @@ const Validation = (data, rules, res, next) => {
             });
         });
 
-        console.log(errors);
         return response.unprocessable(res, errors);
     }
 
     next();
-    return;
+    return ;
 };
 
 module.exports = {

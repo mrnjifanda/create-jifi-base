@@ -8,6 +8,10 @@ class MailService {
     static instance;
     settings;
     transport;
+
+    /**
+     * @type { Template }
+     */
     templateConfig;
 
     /**

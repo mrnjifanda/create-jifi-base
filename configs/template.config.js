@@ -39,7 +39,7 @@ class Template {
     handlebars.registerPartial('body', contentSource);
 
     const result = layoutTemplate({
-      body: handlebars.compile('{{> body }}')(options),
+      body: handlebars.compile('{{> body }}')({ app_name: configs.getName(), ...options}),
     });
 
     return result;

@@ -66,6 +66,7 @@ class AuthService extends BaseService {
         const user = await this.create(data);
         if (user.error) return user;
 
+        super.mail().sendWithQueue(data.email, 'OTP verification', 'auth/register-otp', { otp: confirmation_token });
         return {
             error: false,
             data: { otp: confirmation_token, user: user.data }

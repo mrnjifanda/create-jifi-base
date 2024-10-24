@@ -1,4 +1,5 @@
 const { bcrypt, jwt, SECRET_TOKEN } = require('../../configs/app.config');
+const mailService = require('./mail.service');
 
 class BaseService {
 
@@ -10,6 +11,10 @@ class BaseService {
         }
 
         this.model = model;
+    }
+
+    mail () {
+        return mailService;
     }
 
     async hash(value) {

@@ -8,7 +8,7 @@ const swagger = require('./docs/swagger');
 const allowedOrigins = configs.getLists('ALLOWED_ORIGINS');
 const app = express();
 
-app.use(cors({ origin: allowedOrigins, optionsSuccessStatus: 200 }));
+app.use(cors({ credentials: true, origin: allowedOrigins, optionsSuccessStatus: 200 }));
 
 if (configs.use('database')) db.connect(configs.getDatabase());
 

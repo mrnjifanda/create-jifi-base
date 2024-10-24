@@ -5,9 +5,14 @@ const QueueService = require('../services/queues/queue.service');
 
 class MailService {
 
+    /**
+     * @type { MailService }
+     */
     static instance;
+
     settings;
     transport;
+    userQueue;
 
     /**
      * @type { Template }
@@ -19,19 +24,23 @@ class MailService {
      */
     queue;
 
-    constructor(settings, templateConfig) {
+    constructor(userQueue, settings, templateConfig) {
 
       if (MailService.instance) return MailService.instance;
 
       this.settings = settings;
+      this.userQueue = userQueue;
       this.templateConfig = templateConfig;
       this.queue = QueueService.getInstance('mailQueue');
       MailService.instance = this;
     }
 
-    static getInstance(settings, templateConfig) {
+    /**
+     * @returns { MailService }
+     */
+    static getInstance(userQueue, settings, templateConfig) {
 
-      if (!MailService.instance) MailService.instance = new MailService(settings, templateConfig);
+      if (!MailService.instance) MailService.instance = new MailService(userQueue, settings, templateConfig);
 
       return MailService.instance;
     }
@@ -43,7 +52,7 @@ class MailService {
         return this.transport;
     }
 
-    async mail (receivers, subject, content, html =  false, sender = null) {
+    async mail (receivers, subject, content, html =  null, sender = null) {
 
         try {
 
@@ -71,24 +80,52 @@ class MailService {
         }
     }
 
-    send (receivers, subject, content, html = false, sender = null) {
+    /**
+     * 
+     * @param { String | String[] } receivers One address mail or a array of addresses mail
+     * @param { String } subject Subject of the mail
+     * @param { String } content  Content of the mail (Messgae or path to a file in templates folder)
+     * @param { Ojbect | Null } html 
+     * @param {*} sender 
+     * @returns 
+     */
+    send (receivers, subject, content, html = null, sender = null) {
 
         const user = sender || { email: this.settings.senderEmail, name: this.settings.senderName };
         return this.mail(receivers, subject, content, html, user);
     }
 
-    sendWithQueue (receivers, subject, content, html = false, sender = null) {
+    /**
+     * 
+     * @param { String | String[] } receivers One address mail or a array of addresses mail
+     * @param { String } subject Subject of the mail
+     * @param { String } content  Content of the mail (Messgae or path to a file in templates folder)
+     * @param { Ojbect | Null } html 
+     * @param {*} sender 
+     * @returns { void }
+     */
+    sendWithQueue (receivers, subject, content, html = null, sender = null) {
 
-        this.queue.add({ receivers, subject, content, html, sender });
+        if (this.userQueue) {
+            
+            this.queue.add({ type: 'mail', data: { receivers, subject, content, html, sender } });
+        } else {
+            this.send(receivers, subject, content, html, sender);
+        }
     }
 
     processQueue () {
 
         this.queue.getQueue().process(async (job, done) => {
 
-            console.log(job.data);
-            const { receivers, subject, content, html, sender } = job.data;
-            await this.send(receivers, subject, content, html, sender);
+            console.log(`Processing job ${job.id}`);
+            const { type, data } = job.data;
+            if (type === 'mail') {
+
+                const { receivers, subject, content, html, sender } = data;
+                await this.send(receivers, subject, content, html, sender);
+            }
+
             done();
         });
 
@@ -102,4 +139,4 @@ class MailService {
     }
 }
 
-module.exports = MailService.getInstance(configs.getMailSettings(), templateConfig);
+module.exports = MailService.getInstance(configs.use('QUEUE'), configs.getMailSettings(), templateConfig);

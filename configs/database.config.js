@@ -16,4 +16,15 @@ const connect = (database) => {
     });
 }
 
-module.exports = { connect };
+const disconnect = () => {
+
+    mongoose.disconnect()
+    .then(() => {
+        console.log("Successfully disconnected to database");
+    })
+    .catch((error) => {
+        console.log("Failed to disconnect: " + error.message);
+    });
+}
+
+module.exports = { connect, disconnect };

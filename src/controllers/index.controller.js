@@ -1,7 +1,7 @@
-const Controller = require('./controller');
+const BaseController = require('../../utils/bases/base.controller');
 const { configs } = require('../../configs/app.config');
 
-class IndexController extends Controller {
+class IndexController extends BaseController {
 
     static instance;
     constructor() {
@@ -22,7 +22,7 @@ class IndexController extends Controller {
       return IndexController.instance;
     }
 
-    index (req, res, next) {
+    welcom (req, res, next) {
 
       return super.success(res, 'Welcom', configs.getAppInfo());
     }

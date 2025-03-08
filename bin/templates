@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const templates = {
-    controller: name => `const Controller = require('./controller');
+    controller: name => `const Controller = require('../../utils/bases/base.controller');
   
 class ${name}Controller extends Controller {
 
@@ -43,7 +43,7 @@ const ${name} = BaseSchema('${name.toLowerCase()}s', schema);
 module.exports = ${name};
 `,
 
-    service: name => `const BaseService = require("./base.service");
+    service: name => `const BaseService = require("../../utils/bases/base.service");
 const ${name} = require("../models/${name.toLowerCase()}.model");
 
 class ${name}Service extends BaseService {

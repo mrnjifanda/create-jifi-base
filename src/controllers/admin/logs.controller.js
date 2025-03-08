@@ -1,7 +1,7 @@
-const Controller = require('./controller');
-const logsService = require('../services/logs.service');
+const BaseController = require('../../../utils/bases/base.controller');
+const logsService = require('../../services/admin/logs.service');
 
-class LogController extends Controller {
+class LogController extends BaseController {
 
     static instance;
     constructor() {

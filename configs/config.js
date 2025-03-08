@@ -137,6 +137,23 @@ class Config {
         const mode = this.getValue('APP_MODE', false);
         return mode == 'PRODUCTION';
     }
+
+    getXApiKey() {
+
+        return this.getValue('X_API_KEY');
+    }
+
+    getAdminUser(role = 'ADMIN') {
+        return {
+            last_name: this.getValue('USER_LASTNAME'),
+            first_name: this.getValue('USER_FIRSTNAME'),
+            username: this.getValue('USER_USERNAME'),
+            email: this.getValue('USER_EMAIL'),
+            password: this.getValue('USER_PASSWORD'),
+            password_confirm: this.getValue('USER_PASSWORD'),
+            role,
+        }
+    }
 }
 
 module.exports = Config.getInstance(process.env).ensureValues([

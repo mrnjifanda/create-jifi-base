@@ -10,7 +10,10 @@ class StorageHelper {
       StorageHelper.instance = this;
     }
 
-    static getInstance(settings) {
+    /**
+     * @returns { StorageHelper }
+     */
+    static getInstance(settings = null) {
 
       if (!StorageHelper.instance) StorageHelper.instance = new StorageHelper();
 

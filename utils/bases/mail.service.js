@@ -1,9 +1,11 @@
 const nodemailer = require('nodemailer');
 const { configs } = require('../../configs/app.config');
 const templateConfig = require("../../configs/template.config");
-const QueueService = require('../services/queues/queue.service');
+const QueueService = require('./queues/queue.service');
 
 class MailService {
+
+    isMailActive = false;
 
     /**
      * @type { MailService }
@@ -29,6 +31,12 @@ class MailService {
       if (MailService.instance) return MailService.instance;
 
       this.settings = settings;
+
+      if (Object.keys(this.settings).length !== 0) {
+
+        this.isMailActive = true;
+      } 
+
       this.userQueue = userQueue;
       this.templateConfig = templateConfig;
       this.queue = QueueService.getInstance('mailQueue');
@@ -53,6 +61,11 @@ class MailService {
     }
 
     async mail (receivers, subject, content, html =  null, sender = null) {
+
+        if (!this.isMailActive) {
+
+            throw new Error("Please enabled mail service in .env file");
+        }
 
         try {
 

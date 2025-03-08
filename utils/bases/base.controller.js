@@ -1,13 +1,13 @@
 const { response } = require('../../configs/app.config');
 
-class Controller {
+class BaseController {
 
     success (res, message, data = null, status_code = 200, status = 'success') {
 
         return response.success(res, null, message, data, status_code, status);
     }
 
-    failed (res, message, data = null, status_code = 401, status = 'failed') {
+    failed (res, message, data = null, status_code = 400, status = 'failed') {
 
         return response.failed(res, null, message, data, status_code, status);
     }
@@ -16,6 +16,11 @@ class Controller {
 
         return response.unprocessable(res, null, data);
     }
+
+    unauthorized (res, message) {
+
+        return response.unauthorized(res, null, message);
+    }
 }
 
-module.exports = Controller;
+module.exports = BaseController;

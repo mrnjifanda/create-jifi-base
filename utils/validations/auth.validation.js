@@ -13,6 +13,14 @@ const register = (req, res, next) => {
     }, res, next);
 };
 
+const activate_account = (req, res, next) => {
+
+    return Validation(req.body, {
+        email: Joi.string().email().required(),
+        code: Joi.string().required()
+    }, res, next);
+};
+
 const login = (req, res, next) => {
 
     return Validation(req.body, {
@@ -21,12 +29,21 @@ const login = (req, res, next) => {
     }, res, next);
 };
 
-const activate_account = (req, res, next) => {
+const email = (req, res, next) => {
 
     return Validation(req.body, {
-        email: Joi.string().email().required(),
-        code: Joi.string().required()
+        email: Joi.string().email().required()
     }, res, next);
-}
+};
 
-module.exports = { register, activate_account, login };
+const reset_password = (req, res, next) => {
+
+    return Validation(req.body, {
+        code: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().pattern(PASSWORD_REGEX).required(),
+        password_confirm: Joi.string().required().valid(Joi.ref('password')),
+    }, res, next);
+};
+
+module.exports = { register, activate_account, login, email, reset_password };

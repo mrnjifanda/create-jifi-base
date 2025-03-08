@@ -16,7 +16,7 @@ function success(res, next, message, data = null, status_code = 200, status = 's
     return response(res, next, message, status_code, status, data);
 }
 
-function failed(res, next, message, data = null, status_code = 401, status = 'failed') {
+function failed(res, next, message, data = null, status_code = 400, status = 'failed') {
 
     return response(res, next, message, status_code, status, data);
 }
@@ -39,9 +39,14 @@ function notFound(res, next, message, data = null) {
     return failed(res, next, message, data, 404);
 }
 
-function forbidden (res, next, message = 'This page requires a login, please login!!!') {
+function forbidden (res, next, message = 'Access to this page is prohibited !!!') {
 
     return failed(res, next, message, null, 403);
 }
 
-module.exports = { response, success, failed, unprocessable, notFound, internalError, forbidden };
+function unauthorized (res, next, message = 'This page requires a login, please login!!!') {
+
+    return failed(res, next, message, null, 401);
+}
+
+module.exports = { response, success, failed, unprocessable, unauthorized, notFound, internalError, forbidden };

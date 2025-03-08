@@ -1,4 +1,4 @@
-const { mongoose, BaseSchema } = require("../../configs/app.config");
+const { Schema, BaseSchema } = require("../../configs/app.config");
 
 const Log = BaseSchema('logs', {
     ip: {
@@ -7,7 +7,7 @@ const Log = BaseSchema('logs', {
         default: null
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "users",
         required: false,
         default: null

@@ -42,9 +42,9 @@ class BaseService {
         }
     }
 
-    token(data) {
+    token(data, expiresIn = '365d') {
 
-        return jwt.sign(data, SECRET_TOKEN);
+        return jwt.sign(data, SECRET_TOKEN, { expiresIn });
     }
 
     tokenVerify (token) {
@@ -75,21 +75,59 @@ class BaseService {
         return selects;
     }
 
+    /**
+     * Executes a default find operation on the specified model using the provided method, filter, and query.
+     *
+     * @param {string} method - The method to be used for the find operation (e.g., 'find', 'findOne').
+     * @param {object} filter - The filter criteria for the find operation.
+     * @param {object} [query={}] - Additional query options for the find operation (e.g., { select: 'name, email', populate: [ { path: 'users', select: 'name, email' } ] }).
+     * @param {string} [query.select] - A string of fields to be selected in the find operation (e.g., 'name, email').
+     * @param {string|array} [query.populate] - A field or fields to be populated in the find operation , (e.g., populate: [{ path: 'users', select: 'name, email' }].
+     * @param {object} [model=null] - The specific model to be used for the find operation. If not provided, the default model will be used.
+     *
+     * @returns {Promise} - A promise that resolves to an object containing the results of the find operation.
+     * The resolved object has the following structure:
+     * {
+     *   error: boolean - Indicates whether the find operation was successful (false) or encountered an error (true).
+     *   data: mixed - The results of the find operation. If an error occurred, this will be undefined.
+     * }
+     *
+     * @throws {Error} - If the method parameter is not provided or is not a valid method name.
+     */
     async defaultFind(method, filter, query = {}, model = null) {
-    
+
         try {
 
             const use_model = this.getModel(model);
-            const results = (Object.keys(query).length != 0 && query.select)
-                ? await use_model[method](filter).select(this.querySelect(query.select))
-                : await use_model[method](filter);
+            let mongooseQuery = use_model[method](filter);
+
+            if (query.select) mongooseQuery = mongooseQuery.select(this.querySelect(query.select));
+
+            if (query.populate) {
+
+                if (Array.isArray(query.populate)) {
+
+                    query.populate.forEach(populateField => {
+
+                        mongooseQuery = mongooseQuery.populate(populateField);
+                    });
+                } else {
+                    mongooseQuery = mongooseQuery.populate(query.populate);
+                }
+            }
+
+            const results = await mongooseQuery;
+
+            // const results = (Object.keys(query).length != 0 && query.select)
+            //     ? await use_model[method](filter).select(this.querySelect(query.select))
+            //     : await use_model[method](filter);
 
             return {
                 error: false,
                 data: results
             };
         } catch (err) {
-    
+
             return {
                 error: true,
                 message: err.message,
@@ -134,6 +172,24 @@ class BaseService {
         }
     }
 
+    /**
+     * Executes a findOne operation on the specified model using the provided filter and query.
+     *
+     * @param {object} filter - The filter criteria for the findOne operation.
+     * @param {object} [query={}] - Additional query options for the findOne operation (e.g., { select: 'name, email', populate: [ { path: 'users', select: 'name, email' } ] }).
+     * @param {string} [query.select] - A string of fields to be selected in the findOne operation (e.g., 'name, email').
+     * @param {string|array} [query.populate] - A field or fields to be populated in the findOne operation , (e.g., populate: [{ path: 'users', select: 'name, email' }].
+     * @param {object} [model=null] - The specific model to be used for the findOne operation. If not provided, the default model will be used.
+     *
+     * @returns {Promise} - A promise that resolves to an object containing the results of the findOne operation.
+     * The resolved object has the following structure:
+     * {
+     *   error: boolean - Indicates whether the findOne operation was successful (false) or encountered an error (true).
+     *   data: mixed - The results of the findOne operation. If an error occurred, this will be undefined.
+     * }
+     *
+     * @throws {Error} - If the defaultFind method fails to execute.
+     */
     async findOne(filter, query = {}, model = null) {
 
         return this.defaultFind('findOne', filter, query, model);

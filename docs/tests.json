@@ -1,0 +1,20 @@
+[
+    {
+        "email": "user4@gmail.com",
+        "password": "User@1234",
+        "password_confirm": "User@1234",
+        "role": "USER"
+    },
+    {
+        "email": "user5@gmail.com",
+        "password": "User@1234",
+        "password_confirm": "User@1234",
+        "role": "USER"
+    },
+    {
+        "email": "user6@gmail.com",
+        "password": "User@1234",
+        "password_confirm": "User@1234",
+        "role": "USER"
+    }
+]

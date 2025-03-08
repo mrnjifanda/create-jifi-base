@@ -70,6 +70,7 @@ Examples:
 | Yes           | Node.js   |
 | Yes           | Npm       |
 | Optional      | MongoDB   |
+| Optional      | Redis     |
 
 ----------
 

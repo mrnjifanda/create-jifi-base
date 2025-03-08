@@ -1,8 +1,8 @@
 const { mongoose } = require("./app.config");
 
-const connect = (database) => {
+const connect = async (database) => {
 
-    mongoose.connect(database, {
+    await mongoose.connect(database, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     }).then(() => {
@@ -16,9 +16,9 @@ const connect = (database) => {
     });
 }
 
-const disconnect = () => {
+const disconnect = async () => {
 
-    mongoose.disconnect()
+    await mongoose.disconnect()
     .then(() => {
         console.log("Successfully disconnected to database");
     })
